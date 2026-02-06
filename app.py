@@ -25,68 +25,109 @@ st.markdown("""
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
     
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    html, body, [data-testid="stAppViewContainer"] {
+        background: #0f172a;
+        color: #e2e8f0;
     }
     
     .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 0;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
     }
     
     .stTabs [data-baseweb="tab-list"] {
-        gap: 2px;
+        border-bottom: 2px solid #334155;
+        gap: 0;
     }
     
     .stTabs [data-baseweb="tab"] {
-        padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        color: white;
+        padding: 12px 24px;
+        background: transparent;
+        color: #94a3b8;
+        border-radius: 0;
+        font-weight: 500;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #64748b;
     }
     
     .stTabs [aria-selected="true"] {
-        background: white !important;
-        color: #667eea !important;
-        font-weight: bold;
+        background: transparent !important;
+        color: #60a5fa !important;
+        border-bottom: 3px solid #60a5fa !important;
     }
     
-    .header-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 50px 20px;
-        border-radius: 0;
+    .card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 16px 0;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        border-color: #60a5fa;
+        box-shadow: 0 10px 40px rgba(96, 165, 250, 0.1);
+    }
+    
+    .header-title {
+        font-size: 2.5em;
+        font-weight: 700;
+        background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-align: center;
+        margin: 30px 0 10px 0;
+        letter-spacing: -1px;
+    }
+    
+    .header-subtitle {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 1.1em;
         margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     
-    .header-container h1 {
-        font-size: 3em;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .header-container p {
-        font-size: 1.2em;
-        opacity: 0.9;
-    }
-    
-    .result-container {
-        padding: 30px;
-        border-radius: 15px;
+    .student-card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border-left: 4px solid #60a5fa;
+        border: 1px solid #334155;
+        border-left: 4px solid #60a5fa;
+        padding: 16px;
+        border-radius: 8px;
+        margin: 20px 0;
         text-align: center;
-        margin-top: 30px;
-        font-weight: bold;
-        font-size: 1.5em;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        animation: slideUp 0.5s ease;
     }
     
-    @keyframes slideUp {
+    .student-card p {
+        margin: 8px 0;
+        color: #cbd5e1;
+    }
+    
+    .student-card b {
+        color: #60a5fa;
+    }
+    
+    .result-box {
+        padding: 40px 30px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 600;
+        font-size: 1.3em;
+        border: 2px solid transparent;
+        animation: slideIn 0.5s ease;
+    }
+    
+    @keyframes slideIn {
         from {
             opacity: 0;
             transform: translateY(20px);
@@ -98,79 +139,65 @@ st.markdown("""
     }
     
     .result-human {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background: linear-gradient(135deg, #10b981 15%, #059669 100%);
+        border-color: #10b981;
         color: white;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
     }
     
     .result-non-human {
-        background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+        background: linear-gradient(135deg, #ef4444 15%, #dc2626 100%);
+        border-color: #ef4444;
         color: white;
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
     }
     
-    .confidence-meter {
-        margin-top: 20px;
-        height: 10px;
-        background: rgba(255,255,255,0.3);
-        border-radius: 5px;
+    .confidence-bar {
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        margin: 20px 0;
         overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .confidence-fill {
         height: 100%;
-        background: white;
-        border-radius: 5px;
-        transition: width 0.3s ease;
+        background: linear-gradient(90deg, #60a5fa, #a78bfa);
+        border-radius: 6px;
+        transition: width 0.5s ease;
     }
     
-    .info-box {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px 0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    .section-title {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #60a5fa;
+        margin: 20px 0 15px 0;
+        border-left: 3px solid #60a5fa;
+        padding-left: 12px;
     }
     
-    .student-info {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        border-left: 4px solid #667eea;
-    }
-    
-    .input-section {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
+    .info-text {
+        color: #cbd5e1;
+        line-height: 1.6;
     }
     
     .footer {
         text-align: center;
-        padding: 20px;
-        color: white;
-        margin-top: 50px;
-        font-size: 12px;
-        opacity: 0.8;
+        padding: 30px 20px;
+        color: #64748b;
+        margin-top: 30px;
+        border-top: 1px solid #334155;
+        font-size: 14px;
+    }
+    
+    .input-label {
+        color: #94a3b8;
+        font-size: 0.95em;
+        margin-bottom: 8px;
     }
 </style>
-""", unsafe_allow_html=True)
-
-# ==================== HEADER ====================
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown("""
-    <div class="header-container">
-        <h1>🤖 HUMAN DETECTION AI</h1>
-        <p>Công nghệ Deep Learning nhận dạng người vs không phải người</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Student Info
-st.markdown("""
-<div class="student-info">
-    <b>👤 Tác giả:</b> Lê Quang Đạo | <b>🎓 MSSV:</b> 223332821
-</div>
 """, unsafe_allow_html=True)
 
 # ==================== CONSTANTS ====================
@@ -205,51 +232,57 @@ def show_result(prediction):
     """Display prediction result with styling"""
     if prediction > 0.5:
         confidence = prediction * 100
-        label = "KHÔNG PHẢI NGƯỜI"
-        emoji = "❌"
+        label = "🚫 KHÔNG PHẢI NGƯỜI"
+        emoji = ""
         class_name = "result-non-human"
     else:
         confidence = (1 - prediction) * 100
-        label = "LÀ NGƯỜI"
-        emoji = "✅"
+        label = "✅ LÀ NGƯỜI"
+        emoji = ""
         class_name = "result-human"
     
     st.markdown(f"""
-    <div class="result-container {class_name}">
-        {emoji} <br> <br>
+    <div class="result-box {class_name}">
         {label}
-        <div class="confidence-meter">
+        <div class="confidence-bar">
             <div class="confidence-fill" style="width: {confidence}%"></div>
         </div>
-        <div style="margin-top: 15px; font-size: 1.1em;">
+        <div style="margin-top: 15px; font-size: 1em;">
             Độ tin cậy: <b>{confidence:.1f}%</b>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ==================== MAIN APP ====================
+st.markdown('<div class="header-title">🤖 HUMAN DETECTION</div>', unsafe_allow_html=True)
+st.markdown('<div class="header-subtitle">AI-Powered Person Recognition System</div>', unsafe_allow_html=True)
+
+st.markdown("""
+<div class="student-card">
+    <p><b>👨‍💼 Developer:</b> Lê Quang Đạo</p>
+    <p><b>🎓 Student ID:</b> 223332821</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
+
 model = load_model()
 
 if model is not None:
     # Create tabs
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📤 Tải Ảnh Lên",
-        "📷 Webcam",
-        "🔗 Link Ảnh",
-        "ℹ️ Hướng Dẫn"
+        "📁 Upload Image",
+        "📸 Webcam",
+        "🌐 Image URL",
+        "📚 Guide"
     ])
     
     # ===== TAB 1: Upload File =====
     with tab1:
-        st.markdown("""
-        <div class="input-section">
-            <h3>📤 Tải ảnh từ máy tính của bạn</h3>
-            <p>Chọn một ảnh JPG, PNG, BMP hoặc WEBP</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="section-title">📁 Select Image from Device</div>', unsafe_allow_html=True)
         
         uploaded_file = st.file_uploader(
-            "Chọn ảnh",
+            "Choose an image file",
             type=['jpg', 'jpeg', 'png', 'bmp', 'webp'],
             key="upload_file"
         )
@@ -259,59 +292,49 @@ if model is not None:
             
             with col1:
                 image = Image.open(uploaded_file)
-                st.image(image, caption="Ảnh của bạn", use_container_width=True)
+                st.image(image, caption="Your Image", use_container_width=True)
             
             with col2:
-                st.markdown("### 🔍 Kết Quả Phân Tích")
-                if st.button("Phân Tích Ảnh", type="primary", use_container_width=True, key="btn_file"):
-                    with st.spinner("⏳ Đang xử lý..."):
+                st.markdown('<div class="section-title">Analysis Result</div>', unsafe_allow_html=True)
+                if st.button("🔍 Analyze", type="primary", use_container_width=True, key="btn_file"):
+                    with st.spinner("Processing image..."):
                         prediction = predict(model, image)
                         show_result(prediction)
     
     # ===== TAB 2: Webcam =====
     with tab2:
-        st.markdown("""
-        <div class="input-section">
-            <h3>📷 Chụp ảnh từ webcam</h3>
-            <p>Cho phép truy cập webcam để chụp ảnh</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="section-title">📸 Capture from Webcam</div>', unsafe_allow_html=True)
         
-        picture = st.camera_input("Chụp ảnh")
+        picture = st.camera_input("Take a photo")
         
         if picture:
             col1, col2 = st.columns([1, 1])
             
             with col1:
                 image = Image.open(picture)
-                st.image(image, caption="Ảnh chụp", use_container_width=True)
+                st.image(image, caption="Captured Image", use_container_width=True)
             
             with col2:
-                st.markdown("### 🔍 Kết Quả Phân Tích")
-                if st.button("Phân Tích Ảnh", type="primary", use_container_width=True, key="btn_camera"):
-                    with st.spinner("⏳ Đang xử lý..."):
+                st.markdown('<div class="section-title">Analysis Result</div>', unsafe_allow_html=True)
+                if st.button("🔍 Analyze", type="primary", use_container_width=True, key="btn_camera"):
+                    with st.spinner("Processing image..."):
                         prediction = predict(model, image)
                         show_result(prediction)
     
     # ===== TAB 3: Image URL =====
     with tab3:
-        st.markdown("""
-        <div class="input-section">
-            <h3>🔗 Phân tích ảnh từ link</h3>
-            <p>Dán link ảnh từ internet (https://...)</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="section-title">🌐 Analyze from URL</div>', unsafe_allow_html=True)
         
         url = st.text_input(
-            "Link ảnh",
+            "Image URL",
             placeholder="https://example.com/image.jpg",
             key="image_url"
         )
         
         if url:
-            if st.button("Tải & Phân Tích", type="primary", use_container_width=True):
+            if st.button("Load & Analyze", type="primary", use_container_width=True):
                 try:
-                    with st.spinner("⏳ Đang tải ảnh..."):
+                    with st.spinner("Loading image..."):
                         response = requests.get(url, timeout=10)
                         response.raise_for_status()
                         image = Image.open(BytesIO(response.content))
@@ -319,70 +342,72 @@ if model is not None:
                         col1, col2 = st.columns([1, 1])
                         
                         with col1:
-                            st.image(image, caption="Ảnh từ link", use_container_width=True)
+                            st.image(image, caption="Image from URL", use_container_width=True)
                         
                         with col2:
-                            st.markdown("### 🔍 Kết Quả Phân Tích")
-                            with st.spinner("⏳ Đang xử lý..."):
+                            st.markdown('<div class="section-title">Analysis Result</div>', unsafe_allow_html=True)
+                            with st.spinner("Processing image..."):
                                 prediction = predict(model, image)
                                 show_result(prediction)
                 
                 except requests.exceptions.MissingSchema:
-                    st.error("❌ Link không hợp lệ. Sử dụng http:// hoặc https://")
+                    st.error("❌ Invalid URL. Use http:// or https://")
                 except requests.exceptions.ConnectionError:
-                    st.error("❌ Không thể kết nối. Kiểm tra link hoặc internet.")
+                    st.error("❌ Cannot connect. Check URL or internet.")
                 except requests.exceptions.Timeout:
-                    st.error("❌ Hết thời gian chờ. Link có thể không hoạt động.")
+                    st.error("❌ Timeout. URL may be unavailable.")
                 except Exception as e:
-                    st.error(f"❌ Lỗi: {str(e)}")
+                    st.error(f"❌ Error: {str(e)}")
     
     # ===== TAB 4: Guide =====
     with tab4:
         st.markdown("""
-        <div class="info-box">
-            <h3>📖 Hướng Dẫn Sử Dụng</h3>
+        <div class="card">
+            <div class="section-title">📖 User Guide</div>
             
-            <h4>✨ Tính Năng:</h4>
-            <ul>
-                <li><b>📤 Upload Ảnh:</b> Tải ảnh từ máy tính</li>
-                <li><b>📷 Webcam:</b> Chụp ảnh trực tiếp</li>
-                <li><b>🔗 URL:</b> Sử dụng link ảnh online</li>
+            <p style="color: #cbd5e1; margin: 15px 0;"><b style="color: #60a5fa;">✨ Features:</b></p>
+            <ul style="color: #cbd5e1; line-height: 1.8;">
+                <li>📁 <b>Upload:</b> Upload image from your device</li>
+                <li>📸 <b>Webcam:</b> Capture image directly</li>
+                <li>🌐 <b>URL:</b> Use online image link</li>
             </ul>
             
-            <h4>📋 Định Dạng Hỗ Trợ:</h4>
-            <p>JPG, JPEG, PNG, BMP, WEBP</p>
+            <p style="color: #cbd5e1; margin: 15px 0;"><b style="color: #60a5fa;">📋 Supported Formats:</b></p>
+            <p style="color: #cbd5e1;">JPG, JPEG, PNG, BMP, WEBP</p>
             
-            <h4>🎯 Cách Sử Dụng:</h4>
-            <ol>
-                <li>Chọn tab phù hợp (Upload, Webcam, hoặc URL)</li>
-                <li>Cung cấp ảnh input</li>
-                <li>Nhấn nút "Phân Tích Ảnh"</li>
-                <li>Xem kết quả và độ tin cậy</li>
+            <p style="color: #cbd5e1; margin: 15px 0;"><b style="color: #60a5fa;">🎯 How to Use:</b></p>
+            <ol style="color: #cbd5e1; line-height: 1.8;">
+                <li>Choose a tab (Upload, Webcam, or URL)</li>
+                <li>Provide image input</li>
+                <li>Click "Analyze" button</li>
+                <li>View results and confidence</li>
             </ol>
             
-            <h4>⚙️ Mô Hình:</h4>
-            <p><b>Architecture:</b> CNN (Convolutional Neural Network)</p>
-            <p><b>Input Size:</b> 64x64 pixels</p>
-            <p><b>Classes:</b> 2 (Người / Không phải người)</p>
-            <p><b>Model File:</b> humantachi.h5</p>
+            <p style="color: #cbd5e1; margin: 15px 0;"><b style="color: #60a5fa;">⚙️ Model Details:</b></p>
+            <ul style="color: #cbd5e1; line-height: 1.8;">
+                <li><b>Architecture:</b> CNN (Convolutional Neural Network)</li>
+                <li><b>Input Size:</b> 64x64 pixels</li>
+                <li><b>Classes:</b> Person / Non-Person</li>
+                <li><b>Model:</b> humantachi.h5</li>
+            </ul>
             
-            <h4>💡 Lưu Ý:</h4>
-            <ul>
-                <li>Ảnh càng rõ ràng, kết quả càng chính xác</li>
-                <li>Tránh ảnh quá nhỏ hoặc quá mờ</li>
-                <li>Độ tin cậy trên 50% = Không phải người</li>
-                <li>Độ tin cậy dưới 50% = Là người</li>
+            <p style="color: #cbd5e1; margin: 15px 0;"><b style="color: #60a5fa;">💡 Tips:</b></p>
+            <ul style="color: #cbd5e1; line-height: 1.8;">
+                <li>Clear images produce better results</li>
+                <li>Avoid very small or blurry images</li>
+                <li>Confidence > 50% = Non-Person</li>
+                <li>Confidence < 50% = Person</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
 else:
-    st.error("❌ Không tìm thấy model (humantachi.h5)")
+    st.error("❌ Model not found (humantachi.h5)")
     st.info("""
-    **Giải pháp:**
-    1. Đặt file `humantachi.h5` cùng thư mục với `app.py`
-    2. Hoặc chạy script huấn luyện trước
-    3. Kiểm tra tên file model
+    **Solution:**
+    1. Place `humantachi.h5` in the same directory as `app.py`
+    2. Or run the training script first
+    3. Check the model filename
     """)
 
 # ==================== FOOTER ====================
