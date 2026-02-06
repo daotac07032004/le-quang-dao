@@ -15,7 +15,7 @@ st.set_page_config(
 @st.cache_resource 
 def load_model():
     # Đảm bảo tên file này khớp y hệt file Bệ hạ tải từ Colab về
-    model_path = 'human_detection_model.h5'
+    model_path = 'humantachi.h5'
     try:
         model = tf.keras.models.load_model(model_path)
         return model
@@ -85,4 +85,5 @@ else:
 
 # Footer
 st.markdown("---")
+
 st.caption("Được phát triển bởi Bệ hạ anh minh.")
