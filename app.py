@@ -1,7 +1,7 @@
 """
 Ứng dụng nhận dạng người vs không phải người
-Sinh viên: Đoàn Minh Thành
-MSSV: 223332848
+Sinh viên: Lê Quang Đạo
+MSSV: 
 """
 
 import streamlit as st
@@ -161,10 +161,11 @@ st.divider()
 st.markdown("""
 <div style="text-align: center; color: gray; font-size: 12px;">
     Deep Learning - Nhận dạng người sử dụng CNN<br>
-    © 2026 Đoàn Minh Thành - 223332848
+    © 2026 Lê Quang Đạo
 </div>
 """, unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
 st.caption("Được phát triển bởi Bệ hạ anh minh.")
+
