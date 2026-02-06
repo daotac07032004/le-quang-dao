@@ -1,87 +1,169 @@
+"""
+Ứng dụng nhận dạng người vs không phải người
+Sinh viên: Đoàn Minh Thành
+MSSV: 223332848
+"""
+
 import streamlit as st
 import tensorflow as tf
+from tensorflow import keras
 from PIL import Image
 import numpy as np
 
-# --- 1. THIẾT LẬP GIAO DIỆN (Long bào) ---
+# Cấu hình trang
 st.set_page_config(
-    page_title="Human Detection AI",
-    page_icon="👑",
+    page_title="Nhận Dạng Người - Đoàn Minh Thành",
+    page_icon="👤",
     layout="centered"
 )
 
-# --- 2. HÀM LOAD MODEL (Triệu hồi thần thú) ---
-# Dùng cache để model chỉ cần load 1 lần duy nhất, giúp web chạy nhanh
-@st.cache_resource 
+# CSS tùy chỉnh
+st.markdown("""
+<style>
+    .main-header {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    .student-info {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .result-box {
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .human {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .non-human {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Header
+st.markdown("""
+<div class="main-header">
+    <h1>🔍 Nhận Dạng Người vs Không Phải Người</h1>
+    <p>Sử dụng mô hình CNN</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Thông tin sinh viên
+st.markdown("""
+<div class="student-info">
+    <p><strong>Sinh viên:</strong> Đoàn Minh Thành</p>
+    <p><strong>MSSV:</strong> 223332848</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
+
+# Hằng số
+IMG_SIZE = 64
+
+@st.cache_resource
 def load_model():
-    # Đảm bảo tên file này khớp y hệt file Bệ hạ tải từ Colab về
-    model_path = 'humantachi.h5'
+    """Load model đã huấn luyện"""
     try:
-        model = tf.keras.models.load_model(model_path)
+        model = keras.models.load_model('humantachi.h5')
         return model
-    except OSError:
+    except Exception as e:
+        st.error(f"Không thể load model: {e}")
         return None
 
-# --- 3. GIAO DIỆN CHÍNH ---
-st.title("👤 Hệ Thống Nhận Diện: NGƯỜI hay VẬT?")
-st.write("---")
-st.info("Bệ hạ hãy ban cho thần một tấm ảnh, thần sẽ soi xét xem đó là Người hay Không phải người.")
+def preprocess_image(image):
+    """Tiền xử lý ảnh để dự đoán"""
+    # Resize ảnh
+    image = image.resize((IMG_SIZE, IMG_SIZE))
+    # Chuyển sang RGB nếu cần
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+    # Chuyển thành numpy array
+    img_array = np.array(image)
+    # Rescale
+    img_array = img_array / 255.0
+    # Thêm batch dimension
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
-# Load model ngay khi vào web
+def predict(model, image):
+    """Dự đoán ảnh"""
+    img_array = preprocess_image(image)
+    prediction = model.predict(img_array, verbose=0)[0][0]
+    return prediction
+
+# Load model
 model = load_model()
 
-if model is None:
-    st.error("⚠️ LỖI: Không tìm thấy file 'human_detection_model.h5'. Bệ hạ hãy nhớ tải file model lên cùng thư mục với file app.py này nhé!")
-else:
-    # --- 4. KHU VỰC TẢI ẢNH ---
-    uploaded_file = st.file_uploader("Chọn ảnh để tải lên...", type=["jpg", "jpeg", "png"])
-
+if model is not None:
+    # Upload ảnh
+    st.subheader("📤 Tải ảnh lên để kiểm tra")
+    uploaded_file = st.file_uploader(
+        "Chọn một ảnh...",
+        type=['jpg', 'jpeg', 'png', 'bmp', 'webp'],
+        help="Hỗ trợ các định dạng: JPG, JPEG, PNG, BMP, WEBP"
+    )
+    
     if uploaded_file is not None:
         # Hiển thị ảnh
         image = Image.open(uploaded_file)
-        st.image(image, caption='Ảnh đã tải lên', use_container_width=True)
         
-        # Nút bấm bắt đầu dự đoán
-        if st.button("🔍 Phân tích ngay"):
-            with st.spinner('Thần đang tính toán... xin Bệ hạ đợi trong giây lát...'):
-                try:
-                    # --- 5. TIỀN XỬ LÝ ẢNH (Phải giống hệt lúc Train) ---
-                    # Resize về 224x224
-                    img = image.resize((224, 224))
-                    img_array = np.array(img)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(image, caption="Ảnh đã tải lên", use_container_width=True)
+        
+        # Nút dự đoán
+        if st.button("🔍 Nhận dạng", type="primary", use_container_width=True):
+            with st.spinner("Đang phân tích..."):
+                prediction = predict(model, image)
+                
+                # Hiển thị kết quả
+                if prediction > 0.5:
+                    confidence = prediction * 100
+                    st.markdown(f"""
+                    <div class="result-box non-human">
+                        ❌ KHÔNG PHẢI NGƯỜI<br>
+                        <small>Độ tin cậy: {confidence:.1f}%</small>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    confidence = (1 - prediction) * 100
+                    st.markdown(f"""
+                    <div class="result-box human">
+                        ✅ LÀ NGƯỜI<br>
+                        <small>Độ tin cậy: {confidence:.1f}%</small>
+                    </div>
+                    """, unsafe_allow_html=True)
+else:
+    st.warning("⚠️ Vui lòng đặt file `human_detection_model.h5` vào cùng thư mục với app.py")
+    st.info("""
+    **Hướng dẫn:**
+    1. Huấn luyện model trên Google Colab bằng notebook đã cung cấp
+    2. Download file `human_detection_model.h5` 
+    3. Đặt file vào cùng thư mục với `app.py`
+    4. Chạy lại ứng dụng: `streamlit run app.py`
+    """)
 
-                    # Nếu ảnh có 4 kênh màu (PNG trong suốt), bỏ kênh Alpha đi chỉ lấy RGB
-                    if img_array.shape[-1] == 4:
-                        img_array = img_array[:, :, :3]
-                    
-                    # Chuẩn hóa về khoảng [0, 1]
-                    img_array = img_array / 255.0
-                    
-                    # Thêm chiều batch (1, 224, 224, 3)
-                    img_array = np.expand_dims(img_array, axis=0)
-
-                    # --- 6. DỰ ĐOÁN ---
-                    prediction = model.predict(img_array)[0][0]
-                    
-                    # Ngưỡng phân loại (Threshold)
-                    threshold = 0.5
-                    
-                    st.divider()
-                    
-                    # --- 7. HIỂN THỊ KẾT QUẢ ---
-                    if prediction > threshold:
-                        confidence = prediction * 100
-                        st.success(f"🎉 Kết quả: ĐÂY LÀ CON NGƯỜI")
-                        st.metric(label="Độ tin cậy", value=f"{confidence:.2f}%")
-                        if confidence > 90:
-                            st.balloons() # Thả bóng bay chúc mừng
-                    else:
-                        confidence = (1 - prediction) * 100
-                        st.warning(f"🤖 Kết quả: KHÔNG PHẢI NGƯỜI")
-                        st.metric(label="Độ tin cậy", value=f"{confidence:.2f}%")
-                        
-                except Exception as e:
-                    st.error(f"Có lỗi xảy ra khi xử lý ảnh: {e}")
+# Footer
+st.divider()
+st.markdown("""
+<div style="text-align: center; color: gray; font-size: 12px;">
+    Deep Learning - Nhận dạng người sử dụng CNN<br>
+    © 2026 Đoàn Minh Thành - 223332848
+</div>
+""", unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
