@@ -12,7 +12,7 @@ import numpy as np
 
 # Cấu hình trang
 st.set_page_config(
-    page_title="Nhận Dạng Người - Đoàn Minh Thành",
+    page_title="Nhận Dạng Người - Lê Quang Đạo",
     page_icon="👤",
     layout="centered"
 )
@@ -55,7 +55,7 @@ st.markdown("""
 # Header
 st.markdown("""
 <div class="main-header">
-    <h1>🔍 Nhận Dạng Người vs Không Phải Người</h1>
+    <h1> Nhận Dạng Người vs Không Phải Người</h1>
     <p>Sử dụng mô hình CNN</p>
 </div>
 """, unsafe_allow_html=True)
@@ -63,8 +63,8 @@ st.markdown("""
 # Thông tin sinh viên
 st.markdown("""
 <div class="student-info">
-    <p><strong>Sinh viên:</strong> Đoàn Minh Thành</p>
-    <p><strong>MSSV:</strong> 223332848</p>
+    <p><strong>Sinh viên:</strong> Lê Quang Đạo</p>
+    <p><strong>MSSV:</strong> 223332821</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -168,4 +168,5 @@ st.markdown("""
 # Footer
 st.markdown("---")
 st.caption("Được phát triển bởi Bệ hạ anh minh.")
+
 
